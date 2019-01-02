@@ -1,18 +1,12 @@
-<mat-toolbar color="primary">
-  <span>EEG WAVE</span>
+<mat-toolbar color="primary" style="height:100px">
+  <span><img src="../assets/brain.svg" height="45"/></span>
+  <h1 class="title">EEG WAVE</h1>
   <span class="fill-space"></span>
-  <span>Options</span>
+  <app-user-profile></app-user-profile>
 </mat-toolbar>
 
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>Title</mat-card-title>
-        <mat-card-subtitle>Subtitle</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        Text content
-    </mat-card-content>
-    <mat-card-actions align="start">
-        <button mat-button (click)="onAction1">Action1</button>
-    </mat-card-actions>
+<mat-card *ngIf="(auth.user | async) as user">
+  <mat-card-header>
+    <mat-card-title>Welcome {{ user.displayName }}</mat-card-title>
+  </mat-card-header>
 </mat-card>
