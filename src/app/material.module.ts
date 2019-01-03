@@ -6,6 +6,8 @@ import {
   MatIconModule,
   MatProgressBarModule,
   MatSnackBarModule,
+  MatCheckboxModule,
+  MatSliderModule,
 } from '@angular/material';
 
 @NgModule({
@@ -17,6 +19,8 @@ import {
     MatIconModule,
     MatProgressBarModule,
     MatSnackBarModule,
+    MatCheckboxModule,
+    MatSliderModule,
   ],
   exports: [
     MatToolbarModule,
@@ -24,6 +28,8 @@ import {
     MatIconModule,
     MatProgressBarModule,
     MatSnackBarModule,
+    MatCheckboxModule,
+    MatSliderModule,
   ],
 })
 export class MaterialModule {}
