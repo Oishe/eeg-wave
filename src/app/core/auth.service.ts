@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -25,8 +25,7 @@ export class AuthService {
   user: Observable<User>;
   constructor(
     private afAuth: AngularFireAuth, //
-    private afs: AngularFirestore,
-    private router: Router
+    private afs: AngularFirestore // private router: Router
   ) {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -37,10 +36,6 @@ export class AuthService {
         }
       })
     );
-  }
-
-  getUser() {
-    return this.user.uid;
   }
 
   googleLogin() {
@@ -68,9 +63,10 @@ export class AuthService {
   }
 
   signOut() {
-    this.afAuth.auth.signOut().then(() => {
-      this.user = of(null);
-      this.router.navigate(['/']);
-    });
+    this.afAuth.auth.signOut();
+    // this.afAuth.auth.signOut().then(() => {
+    // this.user = of(null);
+    // this.router.navigate(['/']);
+    // });
   }
 }
