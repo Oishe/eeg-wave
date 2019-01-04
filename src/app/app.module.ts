@@ -11,9 +11,10 @@ import { AppComponent } from './app.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { TimeSeriesComponent } from './time-series/time-series.component';
 import { ChartService } from './shared/chart.service';
+import { RecorderComponent } from './recorder/recorder.component';
 
 @NgModule({
-  declarations: [AppComponent, UserProfileComponent, TimeSeriesComponent],
+  declarations: [AppComponent, UserProfileComponent, TimeSeriesComponent, RecorderComponent],
   imports: [
     BrowserModule, // AppRoutingModule,
     BrowserAnimationsModule,

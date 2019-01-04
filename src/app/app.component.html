@@ -49,4 +49,16 @@
       <app-time-series [data]="data"></app-time-series>
     </mat-card-content>
   </mat-card>
+  <!-- Recorder -->
+  <mat-card *ngIf="data">
+    <mat-card-header>
+      <mat-card-title>Recorder</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <app-recorder
+        [data]="data"
+        [accelerometer]="accelerometer"
+      ></app-recorder>
+    </mat-card-content>
+  </mat-card>
 </section>
