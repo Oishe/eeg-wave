@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { EEGSample, channelNames, XYZ } from 'muse-js';
+//Necessary for FileStorage
+import { FileUploadService } from '../file-upload.service';
 
 @Component({
   selector: 'app-recorder',
@@ -19,7 +21,7 @@ export class RecorderComponent implements OnInit {
   private EEGsubs: Subscription;
   // private ACCELsubs: Subscription;
 
-  constructor() {}
+  constructor(public fileUpload: FileUploadService) {}
 
   ngOnInit() {}
 
@@ -79,10 +81,16 @@ export class RecorderComponent implements OnInit {
     const csvData =
       headers + '\n' + samples.map(item => item.join(',')).join('\n');
     const file = new Blob([csvData], { type: 'text/csv' });
+
+    //File is created now save to FireStorage
+    this.fileUpload.startUpload(file);
+    //End of FileStorage
+
     a.href = URL.createObjectURL(file);
     document.body.appendChild(a);
     a.download = 'recording.csv';
-    a.click();
+    //a.click();
     document.body.removeChild(a);
+
   }
 }
