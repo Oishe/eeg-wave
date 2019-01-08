@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 // import { AngularFirestore } from "@angular/fire/firestore";
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap, map, share, takeUntil } from 'rxjs/operators';
 import {
   MuseClient,
@@ -27,7 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
   data: Observable<EEGSample> | null;
   batteryLevel: Observable<number> | null;
   controlResponses: Observable<MuseControlResponse>;
-  accelerometer = new Subject<XYZ>();
+  accelerometer = new BehaviorSubject<XYZ>(null);
+  gyroscope = new BehaviorSubject<XYZ>(null);
   destroy = new Subject<void>();
 
   private muse = new MuseClient();
@@ -77,6 +78,12 @@ export class AppComponent implements OnInit, OnDestroy {
           map(reading => reading.samples[reading.samples.length - 1])
         )
         .subscribe(this.accelerometer);
+      this.muse.gyroscopeData
+        .pipe(
+          takeUntil(this.destroy),
+          map(reading => reading.samples[reading.samples.length - 1])
+        )
+        .subscribe(this.gyroscope);
       await this.muse.deviceInfo();
     } catch (err) {
       this.snackBar.open('Connection failed: ' + err.toString(), 'Dismiss');
