@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { RecorderService } from '../recorder/recorder.service';
 
 @Component({
   selector: 'app-activity',
@@ -9,10 +11,25 @@ import { Subscription } from 'rxjs';
 
 export class ActivityComponent implements OnInit, OnDestroy {
   sub: Subscription;
+  recording: boolean = true;
+  startStopUnsubscribe: any;
+  selectedActivity: number = 0;
 
-  constructor() { }
+  constructor(private recorderService:RecorderService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.startStopUnsubscribe = this.recorderService.startStop$.subscribe((res: any) => this.setRecording(res));
+  }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.startStopUnsubscribe.unsubscribe();
+  }
+
+  setRecording(res:any){
+    if(res.start){
+      this.recording=false;
+    }
+    else this.recording = true;
+  }
+
 }
