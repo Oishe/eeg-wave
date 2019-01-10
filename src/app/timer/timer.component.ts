@@ -36,6 +36,11 @@ export class TimerComponent implements OnInit, OnDestroy {
   totalTime: number;
   disable: boolean = false;
 
+  startTime: any;
+  activityStartTime: any;
+  activityEndTime: any;
+  endTime: any;
+
   constructor(private timerService: TimerService) { }
 
   ngOnInit() {
@@ -57,7 +62,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   private startTimer() {
     this.disable=true;
     this.totalTime = this.bufferTime*2 + this.activityTime;
-
+    this.startTime = Date.now()+1;
     const timer = interval(1000);
     this.sub = timer.subscribe(
       t => {
@@ -65,6 +70,13 @@ export class TimerComponent implements OnInit, OnDestroy {
 
         if(this.ticks==this.totalTime){
           this.stopTimer();
+          this.timerService.stopTimer();
+        }
+        if(this.ticks==this.bufferTime){
+          this.activityStartTime = Date.now();
+        }
+        if(this.ticks==this.bufferTime + this.activityTime){
+          this.activityEndTime = Date.now();
         }
         else{
           this.secondsDisplay = this.getSeconds(this.ticks);
@@ -76,7 +88,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   }
 
   private stopTimer() {
-    alert("Duration of recording: " + this.ticks + " seconds");
+    this.endTime = Date.now();
     this.disable = false;
 
     this.start = 0;
