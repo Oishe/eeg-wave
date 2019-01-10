@@ -12,17 +12,25 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { TimeSeriesComponent } from './time-series/time-series.component';
 import { ChartService } from './shared/chart.service';
 import { RecorderComponent } from './recorder/recorder.component';
+import { TimerComponent } from './timer/timer.component';
+import { TimerService } from './timer/timer.service';
 
 @NgModule({
-  declarations: [AppComponent, UserProfileComponent, TimeSeriesComponent, RecorderComponent],
+  declarations: [
+    AppComponent,
+    UserProfileComponent,
+    TimeSeriesComponent,
+    RecorderComponent,
+    TimerComponent
+  ],
   imports: [
     BrowserModule, // AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
-    CoreModule,
+    CoreModule
   ],
-  providers: [ChartService],
+  providers: [ChartService, TimerService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
