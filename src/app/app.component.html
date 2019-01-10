@@ -69,7 +69,7 @@
       <timer-buttons></timer-buttons>
     </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card *ngIf="connected">
     <h2>Activity</h2>
     <mat-card-content>
       <app-activity></app-activity>
