@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+import { FormControl } from '@angular/forms';
+
 // refer here for documentation on simple timer: https://dmkcode.com/2016/08/simple-timer-using-angular-2-and-rxjs/
 // https://dmkcode.com/2016/09/simple-timer-using-angular-2-and-rxjs-part-2/
 
@@ -23,11 +25,16 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   sub: Subscription;
 
-  buffer_1: any;
-  buffer_2: any;
-  activity_1: any;
-  activity_2: any;
-  activity_3: any;
+  buffer_1: number = 30;
+  buffer_2: number = 60;
+  activity_1: number = 180;
+  activity_2: number = 300;
+  activity_3: number = 600;
+
+  bufferTime: number = this.buffer_1;
+  activityTime: number = this.activity_1;
+  totalTime: number;
+  disable: boolean = false;
 
   constructor(private timerService: TimerService) { }
 
@@ -48,20 +55,29 @@ export class TimerComponent implements OnInit, OnDestroy {
   }
 
   private startTimer() {
+    this.disable=true;
+    this.totalTime = this.bufferTime*2 + this.activityTime;
+
     const timer = interval(1000);
     this.sub = timer.subscribe(
       t => {
         this.ticks = this.start + t;
 
-        this.secondsDisplay = this.getSeconds(this.ticks);
-        this.minutesDisplay = this.getMinutes(this.ticks);
-        this.hoursDisplay = this.getHours(this.ticks);
+        if(this.ticks==this.totalTime){
+          this.stopTimer();
+        }
+        else{
+          this.secondsDisplay = this.getSeconds(this.ticks);
+          this.minutesDisplay = this.getMinutes(this.ticks);
+          this.hoursDisplay = this.getHours(this.ticks);
+        }
       }
     );
   }
 
   private stopTimer() {
     alert("Duration of recording: " + this.ticks + " seconds");
+    this.disable = false;
 
     this.start = 0;
     this.ticks = 0;

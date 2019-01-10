@@ -9,3 +9,16 @@
   margin-top: 24px;
   text-align: center;
 }
+
+mat-radio-button {
+  margin: 5px;
+}
+
+.selected {
+  margin: 10px;
+}
+
+.timer-config {
+  display: flex;
+  flex-direction: column;
+}

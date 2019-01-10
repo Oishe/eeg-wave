@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire';
+import { FormsModule } from '@angular/forms';
 
 import { MaterialModule } from './material.module';
 import { CoreModule } from './core/core.module';
@@ -14,6 +15,7 @@ import { ChartService } from './shared/chart.service';
 import { RecorderComponent } from './recorder/recorder.component';
 import { TimerComponent } from './timer/timer.component';
 import { TimerService } from './timer/timer.service';
+import { ButtonsComponent } from './timer/timer.buttons';
 
 @NgModule({
   declarations: [
@@ -21,14 +23,16 @@ import { TimerService } from './timer/timer.service';
     UserProfileComponent,
     TimeSeriesComponent,
     RecorderComponent,
-    TimerComponent
+    TimerComponent,
+    ButtonsComponent
   ],
   imports: [
     BrowserModule, // AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
-    CoreModule
+    CoreModule,
+    FormsModule
   ],
   providers: [ChartService, TimerService],
   bootstrap: [AppComponent],
