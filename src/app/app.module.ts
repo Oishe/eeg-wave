@@ -7,16 +7,20 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { CoreModule } from './core/core.module';
 // import { AppRoutingModule } from './app-routing.module';
+
+import { ChartService } from './shared/chart.service';
+import { TimerService } from './timer/timer.service';
+import { RecorderService } from './recorder/recorder.service';
+
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { TimeSeriesComponent } from './time-series/time-series.component';
-import { ChartService } from './shared/chart.service';
 import { RecorderComponent } from './recorder/recorder.component';
 import { TimerComponent } from './timer/timer.component';
-import { TimerService } from './timer/timer.service';
 import { ButtonsComponent } from './timer/timer.buttons';
-import { RecorderService } from './recorder/recorder.service';
+import { ActivityComponent } from './activity/activity.component';
+import { EmbedGameComponent } from './activity/embed-game/embed-game.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,9 @@ import { RecorderService } from './recorder/recorder.service';
     TimeSeriesComponent,
     RecorderComponent,
     TimerComponent,
-    ButtonsComponent
+    ButtonsComponent,
+    ActivityComponent,
+    EmbedGameComponent
   ],
   imports: [
     BrowserModule, // AppRoutingModule,
