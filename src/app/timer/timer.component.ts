@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 // https://dmkcode.com/2016/09/simple-timer-using-angular-2-and-rxjs-part-2/
 
 import { TimerService } from './timer.service';
+import { RecorderService } from '../recorder/recorder.service';
 
 @Component({
   selector: 'app-timer',
@@ -41,7 +42,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   activityEndTime: any;
   endTime: any;
 
-  constructor(private timerService: TimerService) { }
+  constructor(private timerService: TimerService, private recorderService: RecorderService) { }
 
   ngOnInit() {
     this.playStopUnsubscribe = this.timerService.playStop$.subscribe((res: any) => this.playStop(res));
@@ -71,6 +72,7 @@ export class TimerComponent implements OnInit, OnDestroy {
         if(this.ticks==this.totalTime){
           this.stopTimer();
           this.timerService.stopTimer();
+          this.recorderService.stopRecording();
         }
         if(this.ticks==this.bufferTime){
           this.activityStartTime = Date.now();

@@ -16,6 +16,7 @@ import { RecorderComponent } from './recorder/recorder.component';
 import { TimerComponent } from './timer/timer.component';
 import { TimerService } from './timer/timer.service';
 import { ButtonsComponent } from './timer/timer.buttons';
+import { RecorderService } from './recorder/recorder.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { ButtonsComponent } from './timer/timer.buttons';
     CoreModule,
     FormsModule
   ],
-  providers: [ChartService, TimerService],
+  providers: [ChartService, TimerService, RecorderService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

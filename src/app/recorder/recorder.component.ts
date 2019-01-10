@@ -1,16 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { EEGSample, channelNames, XYZ } from 'muse-js';
 //Necessary for FileStorage
 import { FileUploadService } from '../file-upload.service';
+import { RecorderService } from './recorder.service';
 
 @Component({
   selector: 'app-recorder',
   templateUrl: './recorder.component.html',
   styleUrls: ['./recorder.component.css'],
 })
-export class RecorderComponent implements OnInit {
+export class RecorderComponent implements OnInit, OnDestroy {
   @Input() data: Observable<EEGSample>;
   @Input() accelerometer: BehaviorSubject<XYZ>;
   @Input() gyroscope: BehaviorSubject<XYZ>;
@@ -21,9 +22,25 @@ export class RecorderComponent implements OnInit {
   private EEGsubs: Subscription;
   // private ACCELsubs: Subscription;
 
-  constructor(public fileUpload: FileUploadService) {}
+  private startStopUnsubscribe: any;
 
-  ngOnInit() {}
+  constructor(public fileUpload: FileUploadService, private recorderService: RecorderService) {}
+
+  ngOnInit() {
+    this.startStopUnsubscribe = this.recorderService.startStop$.subscribe((res: any) => this.startStopRecording(res));
+  }
+
+  ngOnDestroy(){
+    this.startStopUnsubscribe.unsubscribe();
+  }
+
+  private startStopRecording(res: any) {
+    if(res.start) {
+      this.startRecording();
+    } else if(res.stop) {
+      this.stopRecording();
+    }
+  }
 
   startRecording() {
     this.recording = true;
