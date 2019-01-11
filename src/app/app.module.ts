@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { ChartService } from './shared/chart.service';
 import { TimerService } from './timer/timer.service';
 import { RecorderService } from './recorder/recorder.service';
+import { DataService } from './shared/data.service';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -41,7 +42,7 @@ import { EmbedGameComponent } from './activity/embed-game/embed-game.component';
     CoreModule,
     FormsModule
   ],
-  providers: [ChartService, TimerService, RecorderService],
+  providers: [ChartService, TimerService, RecorderService, DataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

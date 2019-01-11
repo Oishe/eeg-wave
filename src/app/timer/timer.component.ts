@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
 
 import { TimerService } from './timer.service';
 import { RecorderService } from '../recorder/recorder.service';
+import { DataService } from '../shared/data.service';
 
 @Component({
   selector: 'app-timer',
@@ -42,7 +43,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   activityEndTime: any;
   endTime: any;
 
-  constructor(private timerService: TimerService, private recorderService: RecorderService) { }
+  constructor(private timerService: TimerService, private recorderService: RecorderService, private data:DataService) { }
 
   ngOnInit() {
     this.playStopUnsubscribe = this.timerService.playStop$.subscribe((res: any) => this.playStop(res));
@@ -63,7 +64,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   private startTimer() {
     this.disable=true;
     this.totalTime = this.bufferTime*2 + this.activityTime;
-    this.startTime = Date.now()+1;
+    this.startTime = Date.now();
     const timer = interval(1000);
     this.sub = timer.subscribe(
       t => {
@@ -91,6 +92,14 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   private stopTimer() {
     this.endTime = Date.now();
+
+    this.data.startTime = this.startTime;
+    this.data.activityStartTime = this.activityStartTime;
+    this.data.activityStopTime = this.activityEndTime;
+    this.data.stopTime = this.endTime;
+
+    this.data.outputData(); //check console
+
     this.disable = false;
 
     this.start = 0;
@@ -105,7 +114,6 @@ export class TimerComponent implements OnInit, OnDestroy {
   private getSeconds(ticks: number) {
     return this.pad(ticks % 60);
   }
-
   private getMinutes(ticks: number) {
     return this.pad((Math.floor(ticks / 60)) % 60);
   }
