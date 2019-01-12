@@ -62,14 +62,14 @@
       ></app-recorder>
     </mat-card-content>
   </mat-card>
-  <mat-card *ngIf="connected">
+  <mat-card *ngIf="data">
     <h2>Timer</h2>
     <mat-card-content>
       <app-timer></app-timer>
       <timer-buttons></timer-buttons>
     </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card *ngIf="data">
     <h2>Activity</h2>
     <mat-card-content>
       <app-activity></app-activity>

@@ -26,8 +26,4 @@ export class RecorderService {
     });
   }
 
-  public gamePlay() {
-    this.gameplay = true;
-  }
-
 }
