@@ -1,0 +1,24 @@
+.progress-bar {
+  height: 10px;
+}
+.progress-div {
+  width: 200px;
+}
+.timer {
+  color: #57acec;
+  margin-top: 24px;
+  text-align: center;
+}
+
+mat-radio-button {
+  margin: 5px;
+}
+
+.selected {
+  margin: 10px;
+}
+
+.timer-config {
+  display: flex;
+  flex-direction: column;
+}
