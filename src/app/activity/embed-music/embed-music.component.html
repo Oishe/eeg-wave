@@ -1,0 +1,12 @@
+<h1>Song Selection</h1>
+
+<mat-radio-group [(ngModel)]="selectedSong" color="primary">
+  <div *ngFor="let song of Songs">
+    <mat-radio-button [value]="song">
+      <h3 class="label">{{ song }}</h3>
+    </mat-radio-button>
+  </div>
+</mat-radio-group>
+<button mat-button *ngIf="selectedSong" (click)="playBrownNoise()">
+  Play!
+</button>

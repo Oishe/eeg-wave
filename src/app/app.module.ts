@@ -22,6 +22,7 @@ import { TimerComponent } from './timer/timer.component';
 import { ButtonsComponent } from './timer/timer.buttons';
 import { ActivityComponent } from './activity/activity.component';
 import { EmbedGameComponent } from './activity/embed-game/embed-game.component';
+import { EmbedMusicComponent } from './activity/embed-music/embed-music.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { EmbedGameComponent } from './activity/embed-game/embed-game.component';
     TimerComponent,
     ButtonsComponent,
     ActivityComponent,
-    EmbedGameComponent
+    EmbedGameComponent,
+    EmbedMusicComponent
   ],
   imports: [
     BrowserModule, // AppRoutingModule,
