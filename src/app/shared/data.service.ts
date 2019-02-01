@@ -2,28 +2,37 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable()
 export class DataService {
+  public startTime: number;
+  public activityStartTime: number;
+  public activityStopTime: number;
+  public stopTime: number;
+  public activity: string;
+  public activityDuration: number = 180;
+  public songId: number;
+  public audioPath: string;
 
-  public startTime: any;
-  public activityStartTime: any;
-  public activityStopTime: any;
-  public stopTime: any;
-  public activity: any;
-
-  public user: string;
-  public time: any;
+  public user: string = '';
+  public time: number;
   public score: number;
-  public sessionID: any;
+  public sessionID: number;
   public gameNumber: number;
   public timeScoreID: number;
-  
+
   //user (initials)
   //Object { time: date score: number}
   //sessionID --> call function in file upload service
   //gamenumber
   //timescoreID for object (increment in loop)
-
-  outputData(){
-    console.log(this.activity, this.startTime, this.activityStartTime, this.activityStopTime, this.stopTime);
+  getNoiseAudioPath() {
+    return '../../assets/sounds/BrownNoise30secs.mp3';
   }
-
+  outputData() {
+    console.log(
+      this.activity,
+      this.startTime,
+      this.activityStartTime,
+      this.activityStopTime,
+      this.stopTime
+    );
+  }
 }

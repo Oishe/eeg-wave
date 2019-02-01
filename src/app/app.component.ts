@@ -14,6 +14,7 @@ import {
 // import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthService } from './core/auth.service';
 import { MatSnackBar } from '@angular/material';
+import { FileUploadService } from './file-upload.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'eeg-wave';
   connecting = false;
   connected = false;
+  duration: number;
   data: Observable<EEGSample> | null;
   batteryLevel: Observable<number> | null;
   controlResponses: Observable<MuseControlResponse>;

@@ -9,8 +9,6 @@ import { CoreModule } from './core/core.module';
 // import { AppRoutingModule } from './app-routing.module';
 
 import { ChartService } from './shared/chart.service';
-import { TimerService } from './timer/timer.service';
-import { RecorderService } from './recorder/recorder.service';
 import { DataService } from './shared/data.service';
 
 import { environment } from '../environments/environment';
@@ -18,8 +16,6 @@ import { AppComponent } from './app.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { TimeSeriesComponent } from './time-series/time-series.component';
 import { RecorderComponent } from './recorder/recorder.component';
-import { TimerComponent } from './timer/timer.component';
-import { ButtonsComponent } from './timer/timer.buttons';
 import { ActivityComponent } from './activity/activity.component';
 import { EmbedGameComponent } from './activity/embed-game/embed-game.component';
 import { EmbedMusicComponent } from './activity/embed-music/embed-music.component';
@@ -30,11 +26,9 @@ import { EmbedMusicComponent } from './activity/embed-music/embed-music.componen
     UserProfileComponent,
     TimeSeriesComponent,
     RecorderComponent,
-    TimerComponent,
-    ButtonsComponent,
     ActivityComponent,
     EmbedGameComponent,
-    EmbedMusicComponent
+    EmbedMusicComponent,
   ],
   imports: [
     BrowserModule, // AppRoutingModule,
@@ -42,9 +36,9 @@ import { EmbedMusicComponent } from './activity/embed-music/embed-music.componen
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule,
-    FormsModule
+    FormsModule,
   ],
-  providers: [ChartService, TimerService, RecorderService, DataService],
+  providers: [ChartService, DataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

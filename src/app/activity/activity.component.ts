@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
+import { Subject } from 'rxjs';
 
-import { RecorderService } from '../recorder/recorder.service';
 import { DataService } from '../shared/data.service';
 
 @Component({
@@ -10,32 +9,35 @@ import { DataService } from '../shared/data.service';
   styleUrls: ['./activity.component.css'],
 })
 export class ActivityComponent implements OnInit, OnDestroy {
-  sub: Subscription;
-  recording: boolean = true;
-  startStopUnsubscribe: any;
-  selectedActivity: number = 0;
+  @Input() recording = false;
+  selectedIndex = 0;
+  activityNames: string[] = ['Simon', 'Music'];
+  activity: string;
+  activityDuration = 180;
+  songId: number;
+  audioPath: string;
 
-  constructor(
-    private recorderService: RecorderService,
-    private data: DataService
-  ) {}
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.startStopUnsubscribe = this.recorderService.startStop$.subscribe(
-      (res: any) => this.setRecording(res)
-    );
+    this.dataService.activity = this.activityNames[0];
+    this.dataService.activityDuration = this.activityDuration;
   }
-
-  ngOnDestroy() {
-    this.startStopUnsubscribe.unsubscribe();
+  ngOnDestroy() {}
+  receiveActivity($event) {
+    this.activity = this.activityNames[$event.index];
+    this.dataService.activity = this.activity;
   }
-
-  setRecording(res: any) {
-    if (res.start) {
-      this.recording = false;
-      if (this.selectedActivity == 0) {
-        this.data.activity = 'Simon';
-      } else this.data.activity = 'Music';
-    } else this.recording = true;
+  receiveActivityDuration($event) {
+    this.activityDuration = $event;
+    this.dataService.activityDuration = $event;
+  }
+  receiveSongId($event) {
+    this.songId = $event;
+    this.dataService.songId = $event;
+  }
+  receiveAudioPath($event) {
+    this.audioPath = $event;
+    this.dataService.audioPath = $event;
   }
 }
