@@ -49,15 +49,31 @@
       <app-time-series [data]="data"></app-time-series>
     </mat-card-content>
   </mat-card>
-  <!-- Recorder -->
-  <mat-card *ngIf="data">
-    <mat-card-content>
-      <app-recorder
-        [data]="data"
-        [accelerometer]="accelerometer"
-        [gyroscope]="gyroscope"
-      >
-      </app-recorder>
-    </mat-card-content>
-  </mat-card>
+
+  <div *ngIf="data">
+    <h3>Select A Mode</h3>
+    <mat-tab-group
+      mat-stretch-tabs
+      class="tab-group"
+      [(selectedIndex)]="pageIndex"
+    >
+      <!-- Recorder-->
+      <mat-tab label="Record">
+        <mat-card *ngIf="data">
+          <mat-card-content>
+            <app-recorder
+              [data]="data"
+              [accelerometer]="accelerometer"
+              [gyroscope]="gyroscope"
+            >
+            </app-recorder>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <!-- Predicter -->
+      <mat-tab label="Predict">
+        <app-fft-line-chart [data]="data"></app-fft-line-chart>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </section>

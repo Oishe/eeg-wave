@@ -25,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'eeg-wave';
   connecting = false;
   connected = false;
+  pageIndex = 1;
   duration: number;
   data: Observable<EEGSample> | null;
   batteryLevel: Observable<number> | null;
