@@ -3,6 +3,8 @@ import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
 import { channelNames, EEGSample } from 'muse-js';
 import { Observable, interval } from 'rxjs';
+import { epoch, fft, PSD, bandpassFilter, alphaPower } from '@neurosity/pipes';
+import { BandpassFilter } from '../shared/bandpass-filter';
 
 @Component({
   selector: 'app-fft-line-chart',
@@ -11,6 +13,8 @@ import { Observable, interval } from 'rxjs';
 })
 export class FftLineChartComponent implements OnInit {
   @Input() data: Observable<EEGSample>;
+
+  @Input() filter: boolean;
 
   readonly channels = 4;
   readonly channelNames = channelNames.slice(0, this.channels);
@@ -25,6 +29,18 @@ export class FftLineChartComponent implements OnInit {
   public lineChartLabels: Label[] = [];
   public lineChartOptions: ChartOptions = {
     responsive: true,
+    scales: {
+      yAxes: [
+        {
+          display: true,
+          ticks: {
+            min: 0,
+            max: 12,
+            stepSize: 2,
+          },
+        },
+      ],
+    },
   };
   public lineChartColors: Color[] = [
     {
@@ -47,9 +63,9 @@ export class FftLineChartComponent implements OnInit {
   public lineChartLegend = true;
   public lineChartType: ChartType = 'line';
   public lineChartPlugins = [];
-  size = 10;
+  size = 32;
   left = 0;
-  right = 50;
+  right = 128;
 
   @ViewChild(BaseChartDirective) private _chart: BaseChartDirective;
 
@@ -63,18 +79,46 @@ export class FftLineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.subscribe(sample => {
-      sample.data.slice(0, this.channels).forEach((electrode, index) => {
-        this.addData(sample.timestamp, electrode, index);
+    this.data
+      .pipe(
+        epoch({ duration: 256, interval: 100, samplingRate: 256 }),
+        bandpassFilter({
+          cutoffFrequencies: [2, 50],
+          nbChannels: 5,
+          samplingRate: 256,
+          order: 4,
+        }),
+        fft({ bins: 64 })
+      )
+      .subscribe((power: PSD) => {
+        this.addDataFiltered(power.psd);
       });
-      interval(5000).subscribe(t => {
-        // this._chart.refresh();
+    this.data
+      .pipe(
+        epoch({ duration: 256, interval: 100, samplingRate: 256 }),
+        fft({ bins: 64 })
+      )
+      .subscribe((power: PSD) => {
+        this.addDataUnfiltered(power.psd);
       });
-    });
   }
 
-  addData(timestamp: number, amplitude: number, index: number) {
-    this.lineChartData[index].data.shift();
-    this.lineChartData[index].data[this.size] = amplitude;
+  addData(psd: number[][]) {
+    // console.log(psd);
+    for (let i = 0; i < 4; i++) {
+      this.lineChartData[i].data = psd[i];
+    }
+    this._chart.update();
+  }
+
+  addDataFiltered(psd: number[][]) {
+    if (this.filter) {
+      this.addData(psd);
+    }
+  }
+  addDataUnfiltered(psd: number[][]) {
+    if (!this.filter) {
+      this.addData(psd);
+    }
   }
 }

@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" style="height:100px">
   <span><img src="../assets/brain.svg" class="app-icon"/></span>
-  <h1 class="title">EEG WAVE</h1>
+  <h1 class="title">WAVE CATCHER</h1>
   <span class="fill-space"></span>
   <app-user-profile></app-user-profile>
 </mat-toolbar>
@@ -46,7 +46,10 @@
       <mat-card-title>Live EEG Plot</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <app-time-series [data]="data"></app-time-series>
+      <app-time-series [data]="data" [filter]="filter"></app-time-series>
+      <mat-checkbox [checked]="filter" (change)="filter = !filter">
+        Filter
+      </mat-checkbox>
     </mat-card-content>
   </mat-card>
 
@@ -72,7 +75,11 @@
       </mat-tab>
       <!-- Predicter -->
       <mat-tab label="Predict">
-        <app-fft-line-chart [data]="data"></app-fft-line-chart>
+        <app-fft-line-chart
+          [data]="data"
+          [filter]="filter"
+        ></app-fft-line-chart>
+        <!-- <app-test-chart></app-test-chart> -->
       </mat-tab>
     </mat-tab-group>
   </div>

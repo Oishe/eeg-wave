@@ -10,7 +10,7 @@ import {
   MatSliderModule,
   MatRadioModule,
   MatInputModule,
-  MatTabsModule
+  MatTabsModule,
 } from '@angular/material';
 
 @NgModule({
@@ -26,7 +26,7 @@ import {
     MatSliderModule,
     MatRadioModule,
     MatInputModule,
-    MatTabsModule
+    MatTabsModule,
   ],
   exports: [
     MatToolbarModule,
@@ -38,7 +38,7 @@ import {
     MatSliderModule,
     MatRadioModule,
     MatInputModule,
-    MatTabsModule
+    MatTabsModule,
   ],
 })
 export class MaterialModule {}

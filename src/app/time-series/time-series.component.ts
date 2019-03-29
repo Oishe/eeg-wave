@@ -26,7 +26,7 @@ const samplingFrequency = 256;
 export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() data: Observable<EEGSample>;
 
-  filter = false;
+  @Input() filter: boolean;
 
   readonly channels = 4;
   readonly channelNames = channelNames.slice(0, this.channels);
@@ -52,7 +52,7 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chartService = chartService;
 
     for (let i = 0; i < this.channels; i++) {
-      this.bandpassFilters[i] = new BandpassFilter(samplingFrequency, 1, 30);
+      this.bandpassFilters[i] = new BandpassFilter(samplingFrequency, 2, 50);
     }
   }
 

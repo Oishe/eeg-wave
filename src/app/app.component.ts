@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   connecting = false;
   connected = false;
   pageIndex = 1;
+  filter = false;
   duration: number;
   data: Observable<EEGSample> | null;
   batteryLevel: Observable<number> | null;
