@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
-import { channelNames, EEGSample } from 'muse-js';
+import { EEGSample } from 'muse-js';
 import { Observable, interval } from 'rxjs';
-import { epoch, fft, PSD, bandpassFilter, alphaPower } from '@neurosity/pipes';
-import { BandpassFilter } from '../shared/bandpass-filter';
+import { epoch, bufferFFT, fft, PSD, bandpassFilter } from '@neurosity/pipes';
 
 @Component({
   selector: 'app-fft-line-chart',
@@ -16,15 +15,11 @@ export class FftLineChartComponent implements OnInit {
 
   @Input() filter: boolean;
 
-  readonly channels = 4;
-  readonly channelNames = channelNames.slice(0, this.channels);
-  readonly amplitudes = [];
-
   public lineChartData: ChartDataSets[] = [
-    { data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label: 'Left Temporal' },
-    { data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label: 'Left Frontal' },
-    { data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label: 'Right Frontal' },
-    { data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label: 'Right Temporal' },
+    { data: [], label: 'Left Temporal' },
+    { data: [], label: 'Left Frontal' },
+    { data: [], label: 'Right Frontal' },
+    { data: [], label: 'Right Temporal' },
   ];
   public lineChartLabels: Label[] = [];
   public lineChartOptions: ChartOptions = {
@@ -36,7 +31,7 @@ export class FftLineChartComponent implements OnInit {
           ticks: {
             min: 0,
             max: 12,
-            stepSize: 2,
+            stepSize: 4,
           },
         },
       ],
@@ -63,11 +58,11 @@ export class FftLineChartComponent implements OnInit {
   public lineChartLegend = true;
   public lineChartType: ChartType = 'line';
   public lineChartPlugins = [];
-  size = 32;
+  size = 64;
   left = 0;
   right = 128;
 
-  @ViewChild(BaseChartDirective) private _chart: BaseChartDirective;
+  @ViewChild(BaseChartDirective) private chart: BaseChartDirective;
 
   constructor() {
     // Setting up horizontal axis
@@ -83,12 +78,12 @@ export class FftLineChartComponent implements OnInit {
       .pipe(
         epoch({ duration: 256, interval: 100, samplingRate: 256 }),
         bandpassFilter({
-          cutoffFrequencies: [2, 50],
+          cutoffFrequencies: [3, 30],
           nbChannels: 5,
           samplingRate: 256,
           order: 4,
         }),
-        fft({ bins: 64 })
+        fft({ bins: 128 })
       )
       .subscribe((power: PSD) => {
         this.addDataFiltered(power.psd);
@@ -96,7 +91,7 @@ export class FftLineChartComponent implements OnInit {
     this.data
       .pipe(
         epoch({ duration: 256, interval: 100, samplingRate: 256 }),
-        fft({ bins: 64 })
+        fft({ bins: 128 })
       )
       .subscribe((power: PSD) => {
         this.addDataUnfiltered(power.psd);
@@ -108,7 +103,7 @@ export class FftLineChartComponent implements OnInit {
     for (let i = 0; i < 4; i++) {
       this.lineChartData[i].data = psd[i];
     }
-    this._chart.update();
+    this.chart.update();
   }
 
   addDataFiltered(psd: number[][]) {

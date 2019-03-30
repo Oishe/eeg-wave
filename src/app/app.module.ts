@@ -23,6 +23,7 @@ import { EmbedGameComponent } from './activity/embed-game/embed-game.component';
 import { EmbedMusicComponent } from './activity/embed-music/embed-music.component';
 import { FftLineChartComponent } from './fft-line-chart/fft-line-chart.component';
 import { BandBarChartComponent } from './band-bar-chart/band-bar-chart.component';
+import { HeuristicChartComponent } from './heuristic-chart/heuristic-chart.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { BandBarChartComponent } from './band-bar-chart/band-bar-chart.component
     EmbedMusicComponent,
     FftLineChartComponent,
     BandBarChartComponent,
+    HeuristicChartComponent,
   ],
   imports: [
     BrowserModule, // AppRoutingModule,

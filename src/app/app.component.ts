@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 // import { AngularFirestore } from "@angular/fire/firestore";
 
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { tap, map, share, takeUntil } from 'rxjs/operators';
+import { tap, map, share, takeUntil, timestamp } from 'rxjs/operators';
 import {
   MuseClient,
   MuseControlResponse,
@@ -10,6 +10,7 @@ import {
   EEGSample,
   XYZ,
 } from 'muse-js';
+import { createEEG } from '@neurosity/pipes';
 
 // import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthService } from './core/auth.service';
@@ -25,10 +26,11 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'eeg-wave';
   connecting = false;
   connected = false;
-  pageIndex = 1;
+  pageIndex = 0;
   filter = false;
   duration: number;
   data: Observable<EEGSample> | null;
+  // data: Observable<any> | null;
   batteryLevel: Observable<number> | null;
   controlResponses: Observable<MuseControlResponse>;
   accelerometer = new BehaviorSubject<XYZ>(null);
@@ -54,6 +56,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.data = null;
         this.batteryLevel = null;
       });
+
+    //   this.data = createEEG({
+    //     channels: 4,
+    //     samplingRate: 256,
+    //     sine: 1,
+    //   });
   }
 
   ngOnDestroy() {
