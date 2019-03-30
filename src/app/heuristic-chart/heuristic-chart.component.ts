@@ -13,6 +13,9 @@ export class HeuristicChartComponent implements OnInit {
 
   currentHeuristic = [0, 0, 0, 0];
   avgHeuristic = 0;
+  maxHeuristic = 1;
+  minHeuristic = 0;
+  percentage = 0;
   allHeuristicDeltas = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -100,9 +103,26 @@ export class HeuristicChartComponent implements OnInit {
         this.lineChartData[i].data = this.allHeuristicDeltas[i];
         this.avgHeuristic += heuristic[i];
       }
-      this.avgHeuristic = this.avgHeuristic / 4;
       this.currentHeuristic = heuristic;
+      this.avgHeuristic = this.avgHeuristic / 4;
+
+      if (this.avgHeuristic < this.minHeuristic) {
+        this.minHeuristic = this.avgHeuristic;
+      }
+      if (this.avgHeuristic > this.maxHeuristic) {
+        this.maxHeuristic = this.avgHeuristic;
+      }
+
+      this.percentage =
+        (100 * (this.avgHeuristic - this.minHeuristic)) /
+        (this.maxHeuristic - this.minHeuristic);
+
       this.chart.update();
     });
+  }
+
+  reset() {
+    this.minHeuristic = this.avgHeuristic - 0.001;
+    this.maxHeuristic = this.avgHeuristic + 0.001;
   }
 }
