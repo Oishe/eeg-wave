@@ -136,7 +136,6 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
       );
     }
 
-    console.log(this.lines);
     this.lines[index].append(timestamp, amplitude);
     this.amplitudes[index] = amplitude.toFixed(2);
   }

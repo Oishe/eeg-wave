@@ -93,7 +93,6 @@ export class FftLineChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('fft-line on');
     this.subscription = this.data
       .pipe(
         epoch({ duration: 256, interval: 100, samplingRate: 256 }),
