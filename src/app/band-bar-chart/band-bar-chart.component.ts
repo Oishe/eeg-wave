@@ -13,6 +13,7 @@ import {
   alphaPower,
   betaPower,
 } from '@neurosity/pipes';
+import { preserveWhitespacesDefault } from '@angular/compiler';
 
 @Component({
   selector: 'app-band-bar-chart',
@@ -28,6 +29,14 @@ export class BandBarChartComponent implements OnInit {
   public barChartOptions: ChartOptions = {
     responsive: true,
     scales: {
+      xAxes: [
+        {
+          ticks: {
+            fontColor: 'white',
+            fontSize: 14,
+          },
+        },
+      ],
       yAxes: [
         {
           display: true,
@@ -35,9 +44,17 @@ export class BandBarChartComponent implements OnInit {
             min: 0,
             // max: 10,
             // stepSize: 2,
+            fontColor: 'white',
+            fontSize: 14,
           },
         },
       ],
+    },
+    legend: {
+      labels: {
+        fontColor: 'white',
+        fontSize: 16,
+      },
     },
   };
 

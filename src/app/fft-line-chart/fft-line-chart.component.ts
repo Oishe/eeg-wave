@@ -25,6 +25,14 @@ export class FftLineChartComponent implements OnInit {
   public lineChartOptions: ChartOptions = {
     responsive: true,
     scales: {
+      xAxes: [
+        {
+          ticks: {
+            fontColor: 'white',
+            fontSize: 14,
+          },
+        },
+      ],
       yAxes: [
         {
           display: true,
@@ -32,9 +40,17 @@ export class FftLineChartComponent implements OnInit {
             min: 0,
             max: 12,
             stepSize: 4,
+            fontColor: 'white',
+            fontSize: 14,
           },
         },
       ],
+    },
+    legend: {
+      labels: {
+        fontColor: 'white',
+        fontSize: 16,
+      },
     },
   };
   public lineChartColors: Color[] = [

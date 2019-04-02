@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
 import { Observable, interval } from 'rxjs';
+import { preserveWhitespacesDefault } from '@angular/compiler';
 
 @Component({
   selector: 'app-heuristic-chart',
@@ -54,6 +55,14 @@ export class HeuristicChartComponent implements OnInit {
   public lineChartOptions: ChartOptions = {
     responsive: true,
     scales: {
+      xAxes: [
+        {
+          ticks: {
+            fontColor: 'white',
+            fontSize: 14,
+          },
+        },
+      ],
       yAxes: [
         {
           display: true,
@@ -61,9 +70,17 @@ export class HeuristicChartComponent implements OnInit {
             min: -3,
             max: 3,
             stepSize: 1,
+            fontColor: 'white',
+            fontSize: 14,
           },
         },
       ],
+    },
+    legend: {
+      labels: {
+        fontColor: 'white',
+        fontSize: 16,
+      },
     },
   };
   public lineChartColors: Color[] = [
