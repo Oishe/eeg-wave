@@ -20,11 +20,11 @@
     </aside>
   </article>
 
-  <!-- <div class="graph-settings"> -->
-  <!-- <mat-checkbox [checked]="filter" (change)="filter = !filter"> -->
-  <!-- Filter -->
-  <!-- </mat-checkbox> -->
-  <!-- </div> -->
+  <div class="graph-settings">
+    <mat-checkbox [checked]="filter" (change)="filter = !filter">
+      Filter
+    </mat-checkbox>
+  </div>
   <div class="graph-settings">
     Amplitude Scale :
     <mat-slider
@@ -47,5 +47,16 @@
       step="1"
     ></mat-slider>
     {{ timeScale }}
+  </div>
+  <div class="graph-settings">
+    FPS:
+    <mat-slider
+      (input)="fps = $event.value"
+      [value]="fps"
+      min="1"
+      max="20"
+      step="1"
+    ></mat-slider>
+    {{ fps }}
   </div>
 </section>

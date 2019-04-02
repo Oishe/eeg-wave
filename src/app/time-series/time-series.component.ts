@@ -28,8 +28,9 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // @Input() data: Observable<any>;
 
-  @Input() filter: boolean;
-
+  // @Input() filter: boolean;
+  filter = false;
+  subscription: any;
   readonly channels = 4;
   readonly channelNames = channelNames.slice(0, this.channels);
   readonly amplitudes = [];
@@ -37,9 +38,10 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly uMeans = [0, 0, 0, 0];
 
   readonly options = this.chartService.getChartSmoothieDefaults({
-    millisPerPixel: 8,
+    millisPerPixel: 5,
     maxValue: 500,
     minValue: -500,
+    limitFPS: 8,
   });
   readonly colors = this.chartService.getColors();
   readonly canvases = Array(this.channels)
@@ -79,6 +81,16 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  get fps() {
+    return this.canvases[0].options.limitFPS;
+  }
+
+  set fps(value: number) {
+    for (const canvas of this.canvases) {
+      canvas.options.limitFPS = value;
+    }
+  }
+
   ngAfterViewInit() {
     const channels = this.view.nativeElement.querySelectorAll('canvas');
     this.canvases.forEach((canvas, index) => {
@@ -88,12 +100,12 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.addTimeSeries();
-    this.data.subscribe(sample => {
-      // TODO: revert back
+    this.subscription = this.data.subscribe(sample => {
       sample.data.slice(0, this.channels).forEach((electrode, index) => {
         this.draw(sample.timestamp, electrode, index);
       });
 
+      // change section for test signal
       // this.draw(sample.timestamp, sample.data[0], 0);
       // this.draw(sample.timestamp, sample.data[1], 1);
       // this.draw(sample.timestamp, sample.data[2], 2);
@@ -124,9 +136,12 @@ export class TimeSeriesComponent implements OnInit, OnDestroy, AfterViewInit {
       );
     }
 
+    console.log(this.lines);
     this.lines[index].append(timestamp, amplitude);
     this.amplitudes[index] = amplitude.toFixed(2);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

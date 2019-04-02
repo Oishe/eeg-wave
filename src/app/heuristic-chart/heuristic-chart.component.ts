@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
-import { Observable, interval } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
+import { Observable, interval, Subject } from 'rxjs';
 import { preserveWhitespacesDefault } from '@angular/compiler';
 
 @Component({
@@ -9,9 +10,10 @@ import { preserveWhitespacesDefault } from '@angular/compiler';
   templateUrl: './heuristic-chart.component.html',
   styleUrls: ['./heuristic-chart.component.css'],
 })
-export class HeuristicChartComponent implements OnInit {
+export class HeuristicChartComponent implements OnInit, OnDestroy {
   @Input() heuristics: Observable<number[]>;
 
+  private destroy: Subject<void> = new Subject<void>();
   currentHeuristic = [0, 0, 0, 0];
   avgHeuristic = 0;
   maxHeuristic = 1;
@@ -110,7 +112,7 @@ export class HeuristicChartComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.heuristics.subscribe(heuristic => {
+    this.heuristics.pipe(takeUntil(this.destroy)).subscribe(heuristic => {
       this.avgHeuristic = 0;
       for (let i = 0; i < 4; i++) {
         this.allHeuristicDeltas[i].shift();
@@ -141,5 +143,9 @@ export class HeuristicChartComponent implements OnInit {
   reset() {
     this.minHeuristic = this.avgHeuristic - 0.001;
     this.maxHeuristic = this.avgHeuristic + 0.001;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
   }
 }

@@ -40,18 +40,6 @@
       </span>
     </mat-card-content>
   </mat-card>
-  <!-- TimeSeries Plot -->
-  <mat-card *ngIf="data">
-    <mat-card-header>
-      <mat-card-title>Live EEG Plot</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <app-time-series [data]="data" [filter]="filter"></app-time-series>
-      <mat-checkbox [checked]="filter" (change)="filter = !filter">
-        Filter
-      </mat-checkbox>
-    </mat-card-content>
-  </mat-card>
 
   <div *ngIf="data">
     <h3 style="font-weight: bold">SELECT A MODE</h3>
@@ -60,28 +48,41 @@
       class="tab-group"
       [(selectedIndex)]="pageIndex"
     >
-      <!-- Recorder-->
       <mat-tab label="Record">
-        <mat-card *ngIf="data">
-          <mat-card-content>
-            <app-recorder
-              [data]="data"
-              [accelerometer]="accelerometer"
-              [gyroscope]="gyroscope"
-            >
-            </app-recorder>
-          </mat-card-content>
-        </mat-card>
+        <div *ngIf="pageIndex == 0">
+          <!-- TimeSeries Plot -->
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Live EEG Plot</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <app-time-series [data]="data"></app-time-series>
+              <!-- <mat-checkbox [checked]="filter" (change)="filter = !filter"> -->
+              <!-- Filter -->
+              <!-- </mat-checkbox> -->
+            </mat-card-content>
+          </mat-card>
+          <!-- Recorder-->
+          <mat-card>
+            <mat-card-content>
+              <app-recorder
+                [data]="data"
+                [accelerometer]="accelerometer"
+                [gyroscope]="gyroscope"
+              >
+              </app-recorder>
+            </mat-card-content>
+          </mat-card>
+        </div>
       </mat-tab>
       <!-- Predicter -->
       <mat-tab label="Predict">
-        <h2 style="color:white;">EEG FFT</h2>
-        <app-fft-line-chart
-          [data]="data"
-          [filter]="filter"
-        ></app-fft-line-chart>
-        <h2 style="color:white;">EEG Power Bands</h2>
-        <app-band-bar-chart [data]="data"></app-band-bar-chart>
+        <div *ngIf="pageIndex == 1">
+          <h2 style="color:white;">EEG FFT</h2>
+          <app-fft-line-chart [data]="data"></app-fft-line-chart>
+          <h2 style="color:white;">EEG Power Bands</h2>
+          <app-band-bar-chart [data]="data"></app-band-bar-chart>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>

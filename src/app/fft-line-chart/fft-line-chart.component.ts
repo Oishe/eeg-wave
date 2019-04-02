@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnDestroy } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
 import { EEGSample } from 'muse-js';
-import { Observable, interval } from 'rxjs';
+import { Observable, interval, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { epoch, bufferFFT, fft, PSD, bandpassFilter } from '@neurosity/pipes';
 
 @Component({
@@ -10,11 +11,13 @@ import { epoch, bufferFFT, fft, PSD, bandpassFilter } from '@neurosity/pipes';
   templateUrl: './fft-line-chart.component.html',
   styleUrls: ['./fft-line-chart.component.css'],
 })
-export class FftLineChartComponent implements OnInit {
-  @Input() data: Observable<EEGSample>;
+export class FftLineChartComponent implements OnInit, OnDestroy {
+  // @Input() data: Observable<EEGSample>;
+  @Input() data: Observable<any>;
 
-  @Input() filter: boolean;
-
+  // @Input() filter: boolean;
+  subscription: any;
+  private destroy: Subject<void> = new Subject<void>();
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Left Temporal' },
     { data: [], label: 'Left Frontal' },
@@ -90,7 +93,8 @@ export class FftLineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data
+    console.log('fft-line on');
+    this.subscription = this.data
       .pipe(
         epoch({ duration: 256, interval: 100, samplingRate: 256 }),
         bandpassFilter({
@@ -102,15 +106,7 @@ export class FftLineChartComponent implements OnInit {
         fft({ bins: 128 })
       )
       .subscribe((power: PSD) => {
-        this.addDataFiltered(power.psd);
-      });
-    this.data
-      .pipe(
-        epoch({ duration: 256, interval: 100, samplingRate: 256 }),
-        fft({ bins: 128 })
-      )
-      .subscribe((power: PSD) => {
-        this.addDataUnfiltered(power.psd);
+        this.addData(power.psd);
       });
   }
 
@@ -122,14 +118,7 @@ export class FftLineChartComponent implements OnInit {
     this.chart.update();
   }
 
-  addDataFiltered(psd: number[][]) {
-    if (this.filter) {
-      this.addData(psd);
-    }
-  }
-  addDataUnfiltered(psd: number[][]) {
-    if (!this.filter) {
-      this.addData(psd);
-    }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
 import { EEGSample } from 'muse-js';
-import { Observable, interval } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Observable, interval, Subject } from 'rxjs';
 import {
   epoch,
   fft,
@@ -20,9 +21,11 @@ import { preserveWhitespacesDefault } from '@angular/compiler';
   templateUrl: './band-bar-chart.component.html',
   styleUrls: ['./band-bar-chart.component.css'],
 })
-export class BandBarChartComponent implements OnInit {
-  @Input() data: Observable<EEGSample>;
+export class BandBarChartComponent implements OnInit, OnDestroy {
+  // @Input() data: Observable<EEGSample>;
+  @Input() data: Observable<any>;
 
+  private destroy: Subject<void> = new Subject<void>();
   heuristics: Observable<number[]>;
   meanPowers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
 
@@ -111,19 +114,33 @@ export class BandBarChartComponent implements OnInit {
     );
 
     filteredData
-      .pipe(deltaPower())
+      .pipe(
+        takeUntil(this.destroy),
+        deltaPower()
+      )
       .subscribe(powers => this.addPowers(0, powers));
     filteredData
-      .pipe(thetaPower())
+      .pipe(
+        takeUntil(this.destroy),
+        thetaPower()
+      )
       .subscribe(powers => this.addPowers(1, powers));
     filteredData
-      .pipe(alphaPower())
+      .pipe(
+        takeUntil(this.destroy),
+        alphaPower()
+      )
       .subscribe(powers => this.addPowers(2, powers));
     filteredData
-      .pipe(betaPower())
+      .pipe(
+        takeUntil(this.destroy),
+        betaPower()
+      )
       .subscribe(powers => this.addPowers(3, powers));
 
-    interval(1000).subscribe(() => this.chart.update());
+    interval(1000)
+      .pipe(takeUntil(this.destroy))
+      .subscribe(() => this.chart.update());
     this.heuristics = new Observable(subscriber => {
       setInterval(() => {
         const heuristicValues = [0, 0, 0, 0];
@@ -146,5 +163,8 @@ export class BandBarChartComponent implements OnInit {
         0.75 * this.meanPowers[powerIndex][i] + 0.25 * powers[i];
       this.barChartData[i].data[powerIndex] = powers[i];
     }
+  }
+  ngOnDestroy(): void {
+    this.destroy.next();
   }
 }

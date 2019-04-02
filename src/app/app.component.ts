@@ -57,11 +57,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.batteryLevel = null;
       });
 
-    //   this.data = createEEG({
-    //     channels: 4,
-    //     samplingRate: 256,
-    //     sine: 1,
-    //   });
+    // this.data = createEEG({
+    // channels: 4,
+    // samplingRate: 256,
+    // sine: 1,
+    // });
   }
 
   ngOnDestroy() {
